@@ -8,6 +8,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <DismissableToast />
+
       <Component {...pageProps} />
     </>
   );
