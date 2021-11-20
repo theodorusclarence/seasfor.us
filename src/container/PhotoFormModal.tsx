@@ -96,8 +96,8 @@ export default function PhotoFormModal({
                 <div className='mt-5 md:mt-0 md:col-span-2'>
                   <FormProvider {...methods}>
                     <form onSubmit={handleSubmit(onSubmit)} className=''>
-                      <div className='shadow sm:rounded-md sm:overflow-hidden'>
-                        <div className='px-4 py-5 space-y-6 bg-white sm:p-6'>
+                      <div className='px-4 sm:px-0'>
+                        <div className='space-y-6 bg-white'>
                           <DropzoneInput
                             id='photo'
                             label='Activity Photo'
@@ -119,7 +119,7 @@ export default function PhotoFormModal({
                             clean up in the beach!
                           </p>
                         </div>
-                        <div className='px-4 py-3 text-right bg-gray-50 sm:px-6'>
+                        <div className='text-right'>
                           <Button
                             variant='primary'
                             type='submit'
