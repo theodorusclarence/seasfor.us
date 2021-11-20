@@ -48,7 +48,7 @@ export default function IndexPage() {
               />
               <div className='relative bg-gray-100 lg:bg-transparent'>
                 <div className='layout lg:grid lg:grid-cols-2'>
-                  <div className='max-w-2xl py-24 mx-auto lg:py-56 lg:max-w-none'>
+                  <div className='flex flex-col max-w-2xl py-24 mx-auto lg:justify-center lg:min-h-main lg:py-0 lg:max-w-none'>
                     <div className='lg:pr-16'>
                       <h1 className='text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl xl:text-6xl'>
                         Support{' '}
@@ -88,6 +88,7 @@ export default function IndexPage() {
               </div>
             </div>
           </div>
+
           {/* Trending products */}
           <section aria-labelledby='trending-heading' className='bg-white'>
             <div className='py-16 sm:py-24 layout lg:py-32'>
