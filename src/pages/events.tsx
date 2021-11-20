@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { Dialog, Disclosure, Transition } from '@headlessui/react';
 import clsx from 'clsx';
+import isFuture from 'date-fns/isFuture';
 import * as React from 'react';
 import { HiChevronDown, HiOutlineX, HiPlusSm } from 'react-icons/hi';
 
@@ -14,45 +15,44 @@ import Seo from '@/components/Seo';
 //#region  //*=========== Data ===========
 const filters = [
   {
-    id: 'color',
-    name: 'Color',
+    id: 'status',
+    name: 'Status',
     options: [
-      { value: 'white', label: 'White' },
-      { value: 'beige', label: 'Beige' },
-      { value: 'blue', label: 'Blue' },
-      { value: 'brown', label: 'Brown' },
-      { value: 'green', label: 'Green' },
-      { value: 'purple', label: 'Purple' },
+      { value: 'upcoming', label: 'Upcoming' },
+      { value: 'ended', label: 'Ended' },
     ],
   },
-  {
-    id: 'category',
-    name: 'Category',
-    options: [
-      { value: 'new-arrivals', label: 'All New Arrivals' },
-      { value: 'tees', label: 'Tees' },
-      { value: 'crewnecks', label: 'Crewnecks' },
-      { value: 'sweatshirts', label: 'Sweatshirts' },
-      { value: 'pants-shorts', label: 'Pants & Shorts' },
-    ],
-  },
-  {
-    id: 'sizes',
-    name: 'Sizes',
-    options: [
-      { value: 'xs', label: 'XS' },
-      { value: 's', label: 'S' },
-      { value: 'm', label: 'M' },
-      { value: 'l', label: 'L' },
-      { value: 'xl', label: 'XL' },
-      { value: '2xl', label: '2XL' },
-    ],
-  },
+];
+const statusFilter = [
+  { value: 'upcoming', label: 'Upcoming' },
+  { value: 'ended', label: 'Ended' },
 ];
 //#endregion  //*======== Data ===========
 
 export default function EventsPage() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = React.useState(false);
+  const [status, setStatus] = React.useState({ upcoming: false, ended: false });
+  const [selectedCity, setSelectedCity] = React.useState<string>('all');
+
+  const statusFilteredProducts = products.filter((p) => {
+    /** If only upcoming checked, then take item if isFuture */
+    if (status.upcoming && !status.ended) {
+      return isFuture(p.date);
+      /** If only ended checked, then take item if not isFuture */
+    } else if (status.ended && !status.upcoming) {
+      return !isFuture(p.date);
+      /** Else, take all products */
+    } else {
+      return true;
+    }
+  });
+
+  const cities = products.map((p) => p.city);
+  const filteredProducts = statusFilteredProducts.filter((p) => {
+    if (selectedCity === 'all') return true;
+
+    return p.city === selectedCity;
+  });
 
   return (
     <Layout>
@@ -134,6 +134,20 @@ export default function EventsPage() {
                                   id={`${section.id}-${optionIdx}-mobile`}
                                   name={`${section.id}[]`}
                                   defaultValue={option.value}
+                                  value={
+                                    status[
+                                      option.value as 'upcoming' | 'ended'
+                                    ] + ''
+                                  }
+                                  onChange={() =>
+                                    setStatus((status) => ({
+                                      ...status,
+                                      [option.value]:
+                                        !status[
+                                          option.value as 'upcoming' | 'ended'
+                                        ],
+                                    }))
+                                  }
                                   type='checkbox'
                                   className='w-4 h-4 border-gray-300 rounded text-primary-600 focus:ring-primary-500'
                                 />
@@ -151,6 +165,55 @@ export default function EventsPage() {
                     )}
                   </Disclosure>
                 ))}
+                <Disclosure
+                  as='div'
+                  className='pt-4 pb-4 border-t border-gray-200'
+                >
+                  {({ open }) => (
+                    <fieldset>
+                      <legend className='w-full px-2'>
+                        <Disclosure.Button className='flex items-center justify-between w-full p-2 text-gray-400 hover:text-gray-500'>
+                          <span className='text-sm font-medium text-gray-900'>
+                            Cities
+                          </span>
+                          <span className='flex items-center ml-6 h-7'>
+                            <HiChevronDown
+                              className={clsx(
+                                open ? '-rotate-180' : 'rotate-0',
+                                'h-5 w-5 transform'
+                              )}
+                              aria-hidden='true'
+                            />
+                          </span>
+                        </Disclosure.Button>
+                      </legend>
+                      <Disclosure.Panel className='px-4 pt-4 pb-2'>
+                        <div className='pt-6 space-y-3'>
+                          <div>
+                            <select
+                              value={selectedCity}
+                              onChange={(e) => setSelectedCity(e.target.value)}
+                              name='city'
+                              id='city'
+                              className={clsx(
+                                'focus:ring-primary-500 border-gray-300 focus:border-primary-500',
+                                'block w-full rounded-md shadow-sm'
+                              )}
+                              aria-describedby='city'
+                            >
+                              <option value='all'>All cities</option>
+                              {cities.map((city) => (
+                                <option key={city} value={city}>
+                                  {city}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                      </Disclosure.Panel>
+                    </fieldset>
+                  )}
+                </Disclosure>
               </form>
             </div>
           </Transition.Child>
@@ -179,39 +242,74 @@ export default function EventsPage() {
                 aria-hidden='true'
               />
             </button>
+            {/* Filter for desktop */}
             <div className='hidden lg:block'>
               <form className='space-y-10 divide-y divide-gray-200'>
-                {filters.map((section, sectionIdx) => (
-                  <div
-                    key={section.name}
-                    className={sectionIdx === 0 ? '' : 'pt-10'}
-                  >
-                    <fieldset>
-                      <legend className='block text-sm font-medium text-gray-900'>
-                        {section.name}
-                      </legend>
-                      <div className='pt-6 space-y-3'>
-                        {section.options.map((option, optionIdx) => (
-                          <div key={option.value} className='flex items-center'>
-                            <input
-                              id={`${section.id}-${optionIdx}`}
-                              name={`${section.id}[]`}
-                              defaultValue={option.value}
-                              type='checkbox'
-                              className='w-4 h-4 border-gray-300 rounded text-primary-600 focus:ring-primary-500'
-                            />
-                            <label
-                              htmlFor={`${section.id}-${optionIdx}`}
-                              className='ml-3 text-sm text-gray-600'
-                            >
-                              {option.label}
-                            </label>
-                          </div>
-                        ))}
+                <div>
+                  <fieldset>
+                    <legend className='block text-sm font-medium text-gray-900'>
+                      Status
+                    </legend>
+                    <div className='pt-6 space-y-3'>
+                      {statusFilter.map((option, optionIdx) => (
+                        <div key={option.value} className='flex items-center'>
+                          <input
+                            id={`status-${optionIdx}`}
+                            name={option.value}
+                            defaultValue={option.value}
+                            value={
+                              status[option.value as 'upcoming' | 'ended'] + ''
+                            }
+                            onChange={() =>
+                              setStatus((status) => ({
+                                ...status,
+                                [option.value]:
+                                  !status[option.value as 'upcoming' | 'ended'],
+                              }))
+                            }
+                            type='checkbox'
+                            className='w-4 h-4 border-gray-300 rounded text-primary-600 focus:ring-primary-500'
+                          />
+                          <label
+                            htmlFor={`status-${optionIdx}`}
+                            className='ml-3 text-sm text-gray-600'
+                          >
+                            {option.label}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </fieldset>
+                </div>
+                <div className='pt-10'>
+                  <fieldset>
+                    <legend className='block text-sm font-medium text-gray-900'>
+                      Cities
+                    </legend>
+                    <div className='pt-6 space-y-3'>
+                      <div>
+                        <select
+                          value={selectedCity}
+                          onChange={(e) => setSelectedCity(e.target.value)}
+                          name='city'
+                          id='city'
+                          className={clsx(
+                            'focus:ring-primary-500 border-gray-300 focus:border-primary-500',
+                            'block w-full rounded-md shadow-sm'
+                          )}
+                          aria-describedby='city'
+                        >
+                          <option value='all'>All cities</option>
+                          {cities.map((city) => (
+                            <option key={city} value={city}>
+                              {city}
+                            </option>
+                          ))}
+                        </select>
                       </div>
-                    </fieldset>
-                  </div>
-                ))}
+                    </div>
+                  </fieldset>
+                </div>
               </form>
             </div>
           </aside>
@@ -222,11 +320,17 @@ export default function EventsPage() {
             <h2 id='product-heading' className='sr-only'>
               Products
             </h2>
-            <div className='grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:gap-x-8 xl:grid-cols-3'>
-              {products.map((product) => (
-                <EventCard key={product.id} product={product} />
-              ))}
-            </div>
+            {filteredProducts.length > 0 ? (
+              <div className='grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:gap-x-8 xl:grid-cols-3'>
+                {filteredProducts.map((product) => (
+                  <EventCard key={product.id} product={product} />
+                ))}
+              </div>
+            ) : (
+              <h2>
+                Event not found yet, contribute to <Accent>#seasforus</Accent>
+              </h2>
+            )}
           </section>
         </div>
       </main>
