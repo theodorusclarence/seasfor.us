@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Mobile menu */}
       <Nav.Mobile open={open} setOpen={setOpen} />
 
-      <header className='relative bg-white'>
+      <header className='sticky top-0 z-10 bg-white'>
         <Nav.Desktop open={open} setOpen={setOpen} />
       </header>
       {children}
