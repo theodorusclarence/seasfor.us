@@ -264,7 +264,7 @@ const MobileNav = ({ open, setOpen }: NavProps) => {
                   href='/signin'
                   className='block p-2 -m-2 font-medium text-gray-900'
                 >
-                  Masuk
+                  Sign in
                 </UnstyledLink>
               </div>
               <div className='flow-root'>
@@ -272,7 +272,7 @@ const MobileNav = ({ open, setOpen }: NavProps) => {
                   href='/signup'
                   className='block p-2 -m-2 font-medium text-gray-900'
                 >
-                  Buat akun
+                  Create an account
                 </UnstyledLink>
               </div>
             </div>
@@ -451,14 +451,14 @@ const DesktopNav = ({ setOpen }: NavProps) => {
             href='/signin'
             className='text-sm font-medium text-gray-700 hover:text-gray-800'
           >
-            Masuk
+            Sign in
           </UnstyledLink>
           <span className='w-px h-6 bg-gray-200' aria-hidden='true' />
           <UnstyledLink
             href='/signup'
             className='text-sm font-medium text-gray-700 hover:text-gray-800'
           >
-            Buat akun
+            Create an account
           </UnstyledLink>
         </div>
 

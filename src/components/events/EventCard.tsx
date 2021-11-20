@@ -35,7 +35,7 @@ export default function EventCard({ product }: EventCardProps) {
       <div className='flex flex-col flex-1 p-4 space-y-2'>
         <div className='flex items-center justify-between'>
           <h3 className='text-base font-medium text-gray-900'>
-            <UnstyledLink href={product.href}>
+            <UnstyledLink href={`/event/${product.id}`}>
               <span aria-hidden='true' className='absolute inset-0' />
               {product.name}
             </UnstyledLink>
