@@ -17,6 +17,7 @@ import Layout from '@/components/layout/Layout';
 import UnstyledLink from '@/components/links/UnstyledLink';
 import NextImage from '@/components/NextImage';
 import Seo from '@/components/Seo';
+import PhotoFormModal from '@/container/PhotoFormModal';
 
 const product = products[0];
 const reviews = {
@@ -65,9 +66,13 @@ const faqs = [
 const relatedProducts = [...products];
 
 export default function EventDetailPage() {
+  const [open, setOpen] = React.useState<boolean>(false);
+
   return (
     <Layout>
       <Seo templateTitle='Event Detail' />
+
+      <PhotoFormModal open={open} setOpen={setOpen} />
 
       <main className='layout pt-14 sm:pt-16'>
         {/* Product */}
@@ -127,6 +132,9 @@ export default function EventDetailPage() {
 
             <div className='grid grid-cols-1 mt-10 gap-x-6 gap-y-4 sm:grid-cols-2'>
               <Button variant='primary'>Join</Button>
+              <Button onClick={() => setOpen(true)} variant='primary'>
+                Post Activity
+              </Button>
             </div>
           </div>
 
