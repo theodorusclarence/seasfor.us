@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+import isFuture from 'date-fns/isFuture';
 import * as React from 'react';
 import {
   HiOutlineCalendar,
@@ -18,6 +20,9 @@ type EventCardProps = {
 
 export default function EventCard({ product }: EventCardProps) {
   const { date, time } = formatDateCardEvents(product.date);
+
+  const status = isFuture(product.date) ? 'upcoming' : 'ended';
+
   return (
     <div
       key={product.id}
@@ -32,6 +37,18 @@ export default function EventCard({ product }: EventCardProps) {
           height='720'
         />
       </div>
+      <span
+        className={clsx(
+          'px-2 py-0.5 inline-block text-sm',
+          'absolute right-4 top-4 rounded shadow-sm',
+          {
+            'bg-green-200/90 text-green-800': status === 'upcoming',
+            'bg-gray-200/90 text-gray-800': status === 'ended',
+          }
+        )}
+      >
+        {status}
+      </span>
       <div className='flex flex-col flex-1 p-4 space-y-2'>
         <div className='flex items-center justify-between'>
           <h3 className='text-base font-medium text-gray-900'>
