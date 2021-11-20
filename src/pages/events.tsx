@@ -17,9 +17,11 @@ import {
   HiPlusSm,
 } from 'react-icons/hi';
 
+import { products } from '@/data/products';
+
+import EventCard from '@/components/events/EventCard';
 import Layout from '@/components/layout/Layout';
 import UnstyledLink from '@/components/links/UnstyledLink';
-import NextImage from '@/components/NextImage';
 import Seo from '@/components/Seo';
 
 //#region  //*=========== Data ===========
@@ -190,34 +192,7 @@ const filters = [
     ],
   },
 ];
-const products = [
-  {
-    id: 1,
-    name: 'Pantai Kuta',
-    href: '#',
-    price: '$256',
-    description:
-      'Get the full lineup of our Basic Tees. Have a fresh shirt all week, and an extra for laundry day.',
-    options: '8 colors',
-    imageSrc:
-      'https://res.cloudinary.com/theodorusclarence/image/upload/f_auto,c_fill,ar_5:3,w_1200/v1637384615/seasforus/max-PqoCWV93yps-unsplash_asxwzj.jpg',
-    imageAlt:
-      'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
-  },
-  {
-    id: 2,
-    name: 'Pantai Anyer',
-    href: '#',
-    price: '$32',
-    description:
-      'Look like a visionary CEO and wear the same black t-shirt every day.',
-    options: 'Black',
-    imageSrc:
-      'https://res.cloudinary.com/theodorusclarence/image/upload/f_auto,c_fill,ar_5:3,w_1200/v1637384611/seasforus/rowan-heuvel-U6t80TWJ1DM-unsplash_oiwlnq.jpg',
-    imageAlt: 'Front of plain black t-shirt.',
-  },
-  // More products...
-];
+
 const footerNavigation = {
   products: [
     { name: 'Bags', href: '#' },
@@ -791,14 +766,13 @@ export default function EventsPage() {
               </ol>
             </nav>
           </div>
-          <main className='max-w-2xl px-4 mx-auto lg:max-w-7xl lg:px-8'>
+          <main className='layout'>
             <div className='pt-24 pb-10 border-b border-gray-200'>
               <h1 className='text-4xl font-extrabold tracking-tight text-gray-900'>
-                New Arrivals
+                #seasforus Events
               </h1>
               <p className='mt-4 text-base text-gray-500'>
-                Checkout out the latest release of Basic Tees, new and improved
-                with four openings!
+                Find upcoming organized events to clean our seas together!
               </p>
             </div>
             <div className='pt-12 pb-24 lg:grid lg:grid-cols-3 lg:gap-x-8 xl:grid-cols-4'>
@@ -865,42 +839,7 @@ export default function EventsPage() {
                 </h2>
                 <div className='grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:gap-x-8 xl:grid-cols-3'>
                   {products.map((product) => (
-                    <div
-                      key={product.id}
-                      className='relative flex flex-col overflow-hidden bg-white border border-gray-200 rounded-lg group'
-                    >
-                      <div className='bg-gray-200 aspect-w-5 aspect-h-3 group-hover:opacity-75'>
-                        <NextImage
-                          src={product.imageSrc}
-                          alt={product.imageAlt}
-                          className='object-cover object-center w-full h-full sm:w-full sm:h-full'
-                          width='1200'
-                          height='720'
-                        />
-                      </div>
-                      <div className='flex flex-col flex-1 p-4 space-y-2'>
-                        <h3 className='text-sm font-medium text-gray-900'>
-                          <UnstyledLink href={product.href}>
-                            <span
-                              aria-hidden='true'
-                              className='absolute inset-0'
-                            />
-                            {product.name}
-                          </UnstyledLink>
-                        </h3>
-                        <p className='text-sm text-gray-500'>
-                          {product.description}
-                        </p>
-                        <div className='flex flex-col justify-end flex-1'>
-                          <p className='text-sm italic text-gray-500'>
-                            {product.options}
-                          </p>
-                          <p className='text-base font-medium text-gray-900'>
-                            {product.price}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+                    <EventCard key={product.id} product={product} />
                   ))}
                 </div>
               </section>
