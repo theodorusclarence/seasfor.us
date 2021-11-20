@@ -107,7 +107,7 @@ export default function PhotoFormModal({
                           />
 
                           <TextArea
-                            placeholder='#seasforus rocks!'
+                            placeholder='#SeasForUs rocks!'
                             id='caption'
                             label='How was it?'
                             validation={{ required: 'Photo must be filled' }}

@@ -16,9 +16,10 @@ import NextImage from '@/components/NextImage';
 
 type EventCardProps = {
   product: Product;
+  className?: string;
 };
 
-export default function EventCard({ product }: EventCardProps) {
+export default function EventCard({ product, className }: EventCardProps) {
   const { date, time } = formatDateCardEvents(product.date);
 
   const status = isFuture(product.date) ? 'upcoming' : 'ended';
@@ -26,7 +27,10 @@ export default function EventCard({ product }: EventCardProps) {
   return (
     <div
       key={product.id}
-      className='relative flex flex-col overflow-hidden bg-white border border-gray-200 rounded-lg group'
+      className={clsx(
+        className,
+        'relative flex flex-col overflow-hidden bg-white border border-gray-200 rounded-lg group'
+      )}
     >
       <div className='bg-gray-200 aspect-w-5 aspect-h-3 group-hover:opacity-75'>
         <NextImage

@@ -86,7 +86,7 @@ export default function MyEventsPage() {
                     Events
                   </h2>
                   <p className='max-w-2xl mt-1 text-sm text-gray-500'>
-                    All <Accent>#seasforus</Accent> events you&apos;ve been to
+                    All <Accent>#SeasForUs</Accent> events you&apos;ve been to
                   </p>
                 </div>
                 <div className='grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:gap-x-8 '>

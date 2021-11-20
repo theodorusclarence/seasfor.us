@@ -212,7 +212,7 @@ export default function EventDetailPage() {
                           <h3 className='text-sm text-gray-900'>
                             {review.author}
                           </h3>
-                          <p>Let&apos;s go🔥🔥 #seasforus</p>
+                          <p>Let&apos;s go🔥🔥 #SeasForUs</p>
                           <div className='overflow-hidden bg-gray-100 rounded-lg aspect-w-5 aspect-h-3'>
                             <NextImage
                               src={product.imageSrc}
@@ -251,7 +251,7 @@ export default function EventDetailPage() {
         <div className='max-w-2xl mx-auto mt-24 sm:mt-32 lg:max-w-none'>
           <div className='flex items-center justify-between space-x-4'>
             <h2 className='text-lg font-medium text-gray-900'>
-              Other <Accent>#seasforus</Accent> events
+              Other <Accent>#SeasForUs</Accent> events
             </h2>
             <UnstyledLink
               href='/events'
