@@ -44,7 +44,7 @@ export const products: Array<Product> = [
     participants: '32',
     description:
       'Look like a visionary CEO and wear the same black t-shirt every day.',
-    date: new Date(2021, 11, 22),
+    date: new Date(2021, 8, 22),
     city: 'Rasdhoo, Maldives',
     imageSrc:
       'https://res.cloudinary.com/theodorusclarence/image/upload/f_auto,c_fill,ar_5:3,w_1200/v1637384611/seasforus/sean-oulashin-KMn4VEeEPR8-unsplash_a3l3sn.jpg',
