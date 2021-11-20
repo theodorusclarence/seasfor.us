@@ -31,7 +31,7 @@ export default function ButtonLink({
           'bg-dark text-white': variant === 'dark',
           'bg-white text-dark hover:bg-gray-200 hover:text-dark focus-visible:text-dark border-gray-400':
             variant === 'light',
-          'bg-primary-400 text-black hover:bg-primary-400/90 hover:text-black border-primary-500 focus-visible:text-dark':
+          'bg-primary-400 text-white hover:bg-primary-400/90 hover:text-white border-primary-500 focus-visible:text-dark':
             variant === 'primary',
         },
         className

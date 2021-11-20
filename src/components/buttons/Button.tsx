@@ -36,7 +36,7 @@ export default function Button({
             variant === 'dark',
           'bg-white disabled:bg-gray-200 text-dark hover:bg-gray-200 hover:text-dark focus-visible:text-dark border-gray-400 disabled:hover:text-dark':
             variant === 'light',
-          'bg-primary-400 text-black hover:bg-primary-400/90 hover:text-black border-primary-500 disabled:hover:bg-primary-400 disabled:brightness-75  focus-visible:text-dark':
+          'bg-primary-400 text-white hover:bg-primary-400/90 hover:text-white border-primary-500 disabled:hover:bg-primary-400 disabled:brightness-75  focus-visible:text-dark':
             variant === 'primary',
         },
         'disabled:cursor-not-allowed',
