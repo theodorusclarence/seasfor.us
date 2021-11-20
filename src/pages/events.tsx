@@ -19,6 +19,7 @@ import {
 
 import Layout from '@/components/layout/Layout';
 import UnstyledLink from '@/components/links/UnstyledLink';
+import NextImage from '@/components/NextImage';
 import Seo from '@/components/Seo';
 
 //#region  //*=========== Data ===========
@@ -192,27 +193,27 @@ const filters = [
 const products = [
   {
     id: 1,
-    name: 'Basic Tee 8-Pack',
+    name: 'Pantai Kuta',
     href: '#',
     price: '$256',
     description:
       'Get the full lineup of our Basic Tees. Have a fresh shirt all week, and an extra for laundry day.',
     options: '8 colors',
     imageSrc:
-      'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-01.jpg',
+      'https://res.cloudinary.com/theodorusclarence/image/upload/f_auto,c_fill,ar_5:3,w_1200/v1637384615/seasforus/max-PqoCWV93yps-unsplash_asxwzj.jpg',
     imageAlt:
       'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
   },
   {
     id: 2,
-    name: 'Basic Tee',
+    name: 'Pantai Anyer',
     href: '#',
     price: '$32',
     description:
       'Look like a visionary CEO and wear the same black t-shirt every day.',
     options: 'Black',
     imageSrc:
-      'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-02.jpg',
+      'https://res.cloudinary.com/theodorusclarence/image/upload/f_auto,c_fill,ar_5:3,w_1200/v1637384611/seasforus/rowan-heuvel-U6t80TWJ1DM-unsplash_oiwlnq.jpg',
     imageAlt: 'Front of plain black t-shirt.',
   },
   // More products...
@@ -869,10 +870,12 @@ export default function EventsPage() {
                       className='relative flex flex-col overflow-hidden bg-white border border-gray-200 rounded-lg group'
                     >
                       <div className='bg-gray-200 aspect-w-5 aspect-h-3 group-hover:opacity-75'>
-                        <img
+                        <NextImage
                           src={product.imageSrc}
                           alt={product.imageAlt}
                           className='object-cover object-center w-full h-full sm:w-full sm:h-full'
+                          width='1200'
+                          height='720'
                         />
                       </div>
                       <div className='flex flex-col flex-1 p-4 space-y-2'>
