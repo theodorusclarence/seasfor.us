@@ -222,7 +222,7 @@ export default function EventsPage() {
       <main className='layout'>
         <div className='pb-10 border-b border-gray-200 pt-14 sm:pt-16 '>
           <h1 className='text-4xl font-extrabold tracking-tight text-gray-900'>
-            <Accent>#seasforus</Accent> Events
+            <Accent>#SeasForUs</Accent> Events
           </h1>
           <p className='mt-4 text-base text-gray-500'>
             Find upcoming organized events to clean our seas together!
@@ -328,7 +328,7 @@ export default function EventsPage() {
               </div>
             ) : (
               <h2>
-                Event not found yet, contribute to <Accent>#seasforus</Accent>
+                Event not found yet, contribute to <Accent>#SeasForUs</Accent>
               </h2>
             )}
           </section>

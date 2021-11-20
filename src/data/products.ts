@@ -50,5 +50,18 @@ export const products: Array<Product> = [
       'https://res.cloudinary.com/theodorusclarence/image/upload/f_auto,c_fill,ar_5:3,w_1200/v1637384611/seasforus/sean-oulashin-KMn4VEeEPR8-unsplash_a3l3sn.jpg',
     imageAlt: 'Bikini Beach',
   },
+  {
+    id: 4,
+    name: 'Kenjeran Beach',
+    href: '#',
+    participants: '32',
+    description:
+      'Look like a visionary CEO and wear the same black t-shirt every day.',
+    date: new Date(2021, 10, 22),
+    city: 'Surabaya, Indonesia',
+    imageSrc:
+      'https://res.cloudinary.com/theodorusclarence/image/upload/f_auto,c_fill,ar_5:3,w_1200/v1637384611/seasforus/sean-oulashin-KMn4VEeEPR8-unsplash_a3l3sn.jpg',
+    imageAlt: 'Kenjeran Beach',
+  },
   // More products...
 ];
