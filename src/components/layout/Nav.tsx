@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Dialog, Menu, Popover, Tab, Transition } from '@headlessui/react';
+import { Dialog, Menu, Transition } from '@headlessui/react';
 import clsx from 'clsx';
 import * as React from 'react';
 import {
@@ -11,135 +11,10 @@ import {
 
 import UnstyledLink from '@/components/links/UnstyledLink';
 
-const navigation = {
-  categories: [
-    {
-      id: 'women',
-      name: 'Women',
-      featured: [
-        {
-          name: 'New Arrivals',
-          href: '#',
-          imageSrc:
-            'https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg',
-          imageAlt:
-            'Models sitting back to back, wearing Basic Tee in black and bone.',
-        },
-        {
-          name: 'Basic Tees',
-          href: '#',
-          imageSrc:
-            'https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg',
-          imageAlt:
-            'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
-        },
-      ],
-      sections: [
-        {
-          id: 'clothing',
-          name: 'Clothing',
-          items: [
-            { name: 'Tops', href: '#' },
-            { name: 'Dresses', href: '#' },
-            { name: 'Pants', href: '#' },
-            { name: 'Denim', href: '#' },
-            { name: 'Sweaters', href: '#' },
-            { name: 'T-Shirts', href: '#' },
-            { name: 'Jackets', href: '#' },
-            { name: 'Activewear', href: '#' },
-            { name: 'Browse All', href: '#' },
-          ],
-        },
-        {
-          id: 'accessories',
-          name: 'Accessories',
-          items: [
-            { name: 'Watches', href: '#' },
-            { name: 'Wallets', href: '#' },
-            { name: 'Bags', href: '#' },
-            { name: 'Sunglasses', href: '#' },
-            { name: 'Hats', href: '#' },
-            { name: 'Belts', href: '#' },
-          ],
-        },
-        {
-          id: 'brands',
-          name: 'Brands',
-          items: [
-            { name: 'Full Nelson', href: '#' },
-            { name: 'My Way', href: '#' },
-            { name: 'Re-Arranged', href: '#' },
-            { name: 'Counterfeit', href: '#' },
-            { name: 'Significant Other', href: '#' },
-          ],
-        },
-      ],
-    },
-    {
-      id: 'men',
-      name: 'Men',
-      featured: [
-        {
-          name: 'New Arrivals',
-          href: '#',
-          imageSrc:
-            'https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg',
-          imageAlt:
-            'Drawstring top with elastic loop closure and textured interior padding.',
-        },
-        {
-          name: 'Artwork Tees',
-          href: '#',
-          imageSrc:
-            'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg',
-          imageAlt:
-            'Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.',
-        },
-      ],
-      sections: [
-        {
-          id: 'clothing',
-          name: 'Clothing',
-          items: [
-            { name: 'Tops', href: '#' },
-            { name: 'Pants', href: '#' },
-            { name: 'Sweaters', href: '#' },
-            { name: 'T-Shirts', href: '#' },
-            { name: 'Jackets', href: '#' },
-            { name: 'Activewear', href: '#' },
-            { name: 'Browse All', href: '#' },
-          ],
-        },
-        {
-          id: 'accessories',
-          name: 'Accessories',
-          items: [
-            { name: 'Watches', href: '#' },
-            { name: 'Wallets', href: '#' },
-            { name: 'Bags', href: '#' },
-            { name: 'Sunglasses', href: '#' },
-            { name: 'Hats', href: '#' },
-            { name: 'Belts', href: '#' },
-          ],
-        },
-        {
-          id: 'brands',
-          name: 'Brands',
-          items: [
-            { name: 'Re-Arranged', href: '#' },
-            { name: 'Counterfeit', href: '#' },
-            { name: 'Full Nelson', href: '#' },
-            { name: 'My Way', href: '#' },
-          ],
-        },
-      ],
-    },
-  ],
-  pages: [
-    { name: 'Company', href: '#' },
-    { name: 'Stores', href: '#' },
-  ],
-};
+const navItems = [
+  { name: 'Events', href: '/events' },
+  { name: 'Leaderboard', href: '/leaderboard' },
+];
 
 type NavProps = {
   open: boolean;
@@ -188,71 +63,14 @@ const MobileNav = ({ open, setOpen }: NavProps) => {
             </div>
 
             {/* Links */}
-            <Tab.Group as='div' className='mt-2'>
-              <div className='border-b border-gray-200'>
-                <Tab.List className='flex px-4 -mb-px space-x-8'>
-                  {navigation.categories.map((category) => (
-                    <Tab
-                      key={category.name}
-                      className={({ selected }) =>
-                        clsx(
-                          selected
-                            ? 'text-primary-600 border-primary-600'
-                            : 'text-gray-900 border-transparent',
-                          'flex-1 whitespace-nowrap py-4 px-1 border-b-2 text-base font-medium'
-                        )
-                      }
-                    >
-                      {category.name}
-                    </Tab>
-                  ))}
-                </Tab.List>
-              </div>
-              <Tab.Panels as={React.Fragment}>
-                {navigation.categories.map((category) => (
-                  <Tab.Panel
-                    key={category.name}
-                    className='px-4 pt-10 pb-8 space-y-10'
-                  >
-                    <div className='grid grid-cols-2 gap-x-4'>
-                      {category.featured.map((item) => (
-                        <div key={item.name} className='relative text-sm group'>
-                          <div className='overflow-hidden bg-gray-100 rounded-lg aspect-w-1 aspect-h-1 group-hover:opacity-75'>
-                            <img
-                              src={item.imageSrc}
-                              alt={item.imageAlt}
-                              className='object-cover object-center'
-                            />
-                          </div>
-                          <UnstyledLink
-                            href={item.href}
-                            className='block mt-6 font-medium text-gray-900'
-                          >
-                            <span
-                              className='absolute inset-0 z-10'
-                              aria-hidden='true'
-                            />
-                            {item.name}
-                          </UnstyledLink>
-                          <p aria-hidden='true' className='mt-1'>
-                            Shop now
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </Tab.Panel>
-                ))}
-              </Tab.Panels>
-            </Tab.Group>
-
             <div className='px-4 py-6 space-y-6 border-t border-gray-200'>
-              {navigation.pages.map((page) => (
-                <div key={page.name} className='flow-root'>
+              {navItems.map((item) => (
+                <div key={item.name} className='flow-root'>
                   <UnstyledLink
-                    href={page.href}
+                    href={item.href}
                     className='block p-2 -m-2 font-medium text-gray-900'
                   >
-                    {page.name}
+                    {item.name}
                   </UnstyledLink>
                 </div>
               ))}
@@ -315,134 +133,19 @@ const DesktopNav = ({ setOpen }: NavProps) => {
         </div>
 
         {/* Flyout menus */}
-        <Popover.Group className='hidden lg:ml-8 lg:block lg:self-stretch'>
+        <div className='hidden lg:ml-8 lg:block lg:self-stretch'>
           <div className='flex h-full space-x-8'>
-            {navigation.categories.map((category) => (
-              <Popover key={category.name} className='flex'>
-                {({ open }) => (
-                  <>
-                    <div className='relative flex'>
-                      <Popover.Button
-                        className={clsx(
-                          open
-                            ? 'border-primary-600 text-primary-600'
-                            : 'border-transparent text-gray-700 hover:text-gray-800',
-                          'relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px'
-                        )}
-                      >
-                        {category.name}
-                      </Popover.Button>
-                    </div>
-
-                    <Transition
-                      as={React.Fragment}
-                      enter='transition ease-out duration-200'
-                      enterFrom='opacity-0'
-                      enterTo='opacity-100'
-                      leave='transition ease-in duration-150'
-                      leaveFrom='opacity-100'
-                      leaveTo='opacity-0'
-                    >
-                      <Popover.Panel className='absolute inset-x-0 text-sm text-gray-500 bg-white top-full'>
-                        {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
-                        <div
-                          className='absolute inset-0 bg-white shadow top-1/2'
-                          aria-hidden='true'
-                        />
-                        {/* Fake border when menu is open */}
-                        <div
-                          className='absolute inset-0 top-0 h-px px-8 mx-auto max-w-7xl'
-                          aria-hidden='true'
-                        >
-                          <div
-                            className={clsx(
-                              open ? 'bg-gray-200' : 'bg-transparent',
-                              'w-full h-px transition-colors ease-out duration-200'
-                            )}
-                          />
-                        </div>
-
-                        <div className='relative'>
-                          <div className='px-8 mx-auto max-w-7xl'>
-                            <div className='grid grid-cols-2 py-16 gap-y-10 gap-x-8'>
-                              <div className='grid grid-cols-2 col-start-2 gap-x-8'>
-                                {category.featured.map((item) => (
-                                  <div
-                                    key={item.name}
-                                    className='relative text-base group sm:text-sm'
-                                  >
-                                    <div className='overflow-hidden bg-gray-100 rounded-lg aspect-w-1 aspect-h-1 group-hover:opacity-75'>
-                                      <img
-                                        src={item.imageSrc}
-                                        alt={item.imageAlt}
-                                        className='object-cover object-center'
-                                      />
-                                    </div>
-                                    <UnstyledLink
-                                      href={item.href}
-                                      className='block mt-6 font-medium text-gray-900'
-                                    >
-                                      <span
-                                        className='absolute inset-0 z-10'
-                                        aria-hidden='true'
-                                      />
-                                      {item.name}
-                                    </UnstyledLink>
-                                    <p aria-hidden='true' className='mt-1'>
-                                      Shop now
-                                    </p>
-                                  </div>
-                                ))}
-                              </div>
-                              <div className='grid grid-cols-3 row-start-1 text-sm gap-y-10 gap-x-8'>
-                                {category.sections.map((section) => (
-                                  <div key={section.name}>
-                                    <p
-                                      id={`${section.name}-heading`}
-                                      className='font-medium text-gray-900'
-                                    >
-                                      {section.name}
-                                    </p>
-                                    <ul
-                                      role='list'
-                                      aria-labelledby={`${section.name}-heading`}
-                                      className='mt-6 space-y-6 sm:mt-4 sm:space-y-4'
-                                    >
-                                      {section.items.map((item) => (
-                                        <li key={item.name} className='flex'>
-                                          <UnstyledLink
-                                            href={item.href}
-                                            className='hover:text-gray-800'
-                                          >
-                                            {item.name}
-                                          </UnstyledLink>
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </Popover.Panel>
-                    </Transition>
-                  </>
-                )}
-              </Popover>
-            ))}
-
-            {navigation.pages.map((page) => (
+            {navItems.map((item) => (
               <UnstyledLink
-                key={page.name}
-                href={page.href}
+                key={item.name}
+                href={item.href}
                 className='flex items-center text-sm font-medium text-gray-700 hover:text-gray-800'
               >
-                {page.name}
+                {item.name}
               </UnstyledLink>
             ))}
           </div>
-        </Popover.Group>
+        </div>
       </div>
 
       <div className='flex items-center'>
