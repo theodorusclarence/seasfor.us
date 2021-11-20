@@ -2,11 +2,14 @@
 import { Tab } from '@headlessui/react';
 import clsx from 'clsx';
 import * as React from 'react';
+import toast from 'react-hot-toast';
 import {
   HiOutlineCalendar,
   HiOutlineLocationMarker,
   HiOutlineUser,
 } from 'react-icons/hi';
+
+import { simulateGet } from '@/lib/helper';
 
 import { products } from '@/data/products';
 
@@ -18,6 +21,8 @@ import UnstyledLink from '@/components/links/UnstyledLink';
 import NextImage from '@/components/NextImage';
 import Seo from '@/components/Seo';
 import PhotoFormModal from '@/container/PhotoFormModal';
+
+import { defaultToastMessage } from '@/constant/toast';
 
 const product = products[0];
 const reviews = {
@@ -68,11 +73,28 @@ const relatedProducts = [...products];
 export default function EventDetailPage() {
   const [open, setOpen] = React.useState<boolean>(false);
 
+  const onSubmit = (data: unknown) => {
+    // eslint-disable-next-line no-console
+    console.log(data);
+
+    toast.promise(
+      simulateGet(2000).then(() => {
+        setOpen(false);
+      }),
+      {
+        ...defaultToastMessage,
+        success: 'Successfully posted!',
+      }
+    );
+
+    return;
+  };
+
   return (
     <Layout>
       <Seo templateTitle='Event Detail' />
 
-      <PhotoFormModal open={open} setOpen={setOpen} />
+      <PhotoFormModal open={open} setOpen={setOpen} onSubmit={onSubmit} />
 
       <main className='layout pt-14 sm:pt-16'>
         {/* Product */}
