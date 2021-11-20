@@ -2,8 +2,15 @@ import { AppProps } from 'next/app';
 
 import '@/styles/globals.css';
 
+import DismissableToast from '@/components/DismissableToast';
+
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  return (
+    <>
+      <DismissableToast />
+      <Component {...pageProps} />
+    </>
+  );
 }
 
 export default MyApp;
