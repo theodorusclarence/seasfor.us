@@ -105,12 +105,12 @@ export default function IndexPage() {
                 >
                   Upcoming Events
                 </h2>
-                <a
-                  href='#'
+                <UnstyledLink
+                  href='/events'
                   className='hidden text-sm font-semibold text-primary-600 sm:block hover:text-primary-500'
                 >
                   See everything<span aria-hidden='true'> &rarr;</span>
-                </a>
+                </UnstyledLink>
               </div>
               <div className='relative mt-8'>
                 <div className='relative w-full overflow-x-auto'>
