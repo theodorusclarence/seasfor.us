@@ -1,6 +1,6 @@
 # seasfor.us
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ![seasforus-poster](https://user-images.githubusercontent.com/55318172/142764894-9d46ecac-f674-4e5d-bae8-fc9a82ecb953.jpg)
@@ -71,6 +71,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://theodorusclarence.com"><img src="https://avatars.githubusercontent.com/u/55318172?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Theodorus Clarence</b></sub></a><br /><a href="https://github.com/theodorusclarence/seasfor.us/commits?author=theodorusclarence" title="Code">💻</a> <a href="#design-theodorusclarence" title="Design">🎨</a></td>
+    <td align="center"><a href="https://github.com/rizqitsani"><img src="https://avatars.githubusercontent.com/u/68275535?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Muhammad Rizqi Tsani</b></sub></a><br /><a href="https://github.com/theodorusclarence/seasfor.us/commits?author=rizqitsani" title="Code">💻</a> <a href="#design-rizqitsani" title="Design">🎨</a></td>
   </tr>
 </table>
 
