@@ -37,6 +37,7 @@
     "react-hot-toast": "^2.1.1",
     "react-icons": "^4.3.1",
     "react-image-lightbox": "^5.1.4",
+    "swr": "^1.0.1",
     "zustand": "^3.6.5"
   },
   "devDependencies": {
