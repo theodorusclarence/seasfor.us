@@ -1,6 +1,5 @@
+import { useRouter } from 'next/router';
 import * as React from 'react';
-
-import axiosClient from '@/lib/axios';
 
 import useAuthStore from '@/store/useAuthStore';
 
@@ -9,8 +8,12 @@ import Nav from './Nav';
 import PrivateRoute from '../PrivateRoute';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  //#region  //*=========== COMMONS ===========
   const protectedRoutes = ['/myevents'];
   const [open, setOpen] = React.useState(false);
+  const router = useRouter();
+  const { query, pathname } = router;
+  //#endregion  //*======== COMMONS ===========
 
   //#region  //*=========== STORE ===========
   const login = useAuthStore.useLogin();
@@ -20,14 +23,27 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   React.useEffect(() => {
     const loadUser = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = query.token || localStorage.getItem('token');
+
         if (token === null || token === undefined) {
           return;
         }
 
-        const res = await axiosClient.get('/user/get-user-info');
+        if (query.token) {
+          router.replace(pathname, undefined, { shallow: true });
+        }
 
-        login(res.data.data);
+        // TODO: get user detail
+        // const res = await axiosClient.get('/user/get-user-info');
+
+        login({
+          id: '1',
+          name: 'Rizqi',
+          photo:
+            'https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
+          token:
+            'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwcGRic3Vtc2VsIiwiaWF0IjoxNjM3NDY1NjAwLCJuYmYiOjE2Mzc0NjU2MDAsImV4cCI6MTYzODA3MDQwMCwic3ViIjoyfQ.jDLfPEX4cjTkyz_dKAGM3NBoSYinV6rAfThncc8bHM4',
+        });
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error('error context', err);
@@ -39,7 +55,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
     loadUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [query]);
 
   return (
     <PrivateRoute protectedRoutes={protectedRoutes}>
