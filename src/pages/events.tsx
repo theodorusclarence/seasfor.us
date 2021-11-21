@@ -4,13 +4,18 @@ import clsx from 'clsx';
 import isFuture from 'date-fns/isFuture';
 import * as React from 'react';
 import { HiChevronDown, HiOutlineX, HiPlusSm } from 'react-icons/hi';
+import useSWR from 'swr';
 
-import { products } from '@/data/products';
+import useWithToast from '@/hooks/toast/useWithToast';
+
+import { Product } from '@/data/products';
 
 import Accent from '@/components/Accent';
 import EventCard from '@/components/events/EventCard';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
+
+import { EventsApi } from '@/types/api';
 
 //#region  //*=========== Data ===========
 const filters = [
@@ -30,11 +35,27 @@ const statusFilter = [
 //#endregion  //*======== Data ===========
 
 export default function EventsPage() {
+  const { data: productsData } = useWithToast(useSWR<EventsApi>('/events'));
+  const mappedProducts: Array<Product> =
+    productsData?.data.map((d) => ({
+      id: d.id,
+      name: d.name,
+      description: d.description,
+      href: `/event/${d.id}`,
+      participants: d.participant + '',
+      date: new Date(d.date),
+      city: d.city.name,
+      imageSrc:
+        'https://res.cloudinary.com/theodorusclarence/image/upload/f_auto,c_fill,ar_5:3,w_1200/v1637384615/seasforus/max-PqoCWV93yps-unsplash_asxwzj.jpg',
+      imageAlt: `Picture of ${d.name}`,
+    })) ?? [];
+
+  //#region  //*=========== Filter ===========
   const [mobileFiltersOpen, setMobileFiltersOpen] = React.useState(false);
   const [status, setStatus] = React.useState({ upcoming: false, ended: false });
   const [selectedCity, setSelectedCity] = React.useState<string>('all');
 
-  const statusFilteredProducts = products.filter((p) => {
+  const statusFilteredProducts = mappedProducts.filter((p) => {
     /** If only upcoming checked, then take item if isFuture */
     if (status.upcoming && !status.ended) {
       return isFuture(p.date);
@@ -47,12 +68,13 @@ export default function EventsPage() {
     }
   });
 
-  const cities = products.map((p) => p.city);
+  const cities = mappedProducts.map((p) => p.city);
   const filteredProducts = statusFilteredProducts.filter((p) => {
     if (selectedCity === 'all') return true;
 
     return p.city === selectedCity;
   });
+  //#endregion  //*======== Filter ===========
 
   return (
     <Layout>
