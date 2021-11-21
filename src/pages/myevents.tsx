@@ -89,7 +89,7 @@ export default function MyEventsPage() {
                     All <Accent>#SeasForUs</Accent> events you&apos;ve been to
                   </p>
                 </div>
-                <div className='grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:gap-x-8 '>
+                <div className='grid grid-cols-1 mt-4 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:gap-x-8 '>
                   {products.map((product) => (
                     <EventCard key={product.id} product={product} />
                   ))}

@@ -57,14 +57,14 @@ const reviews = {
 };
 const faqs = [
   {
-    question: 'What format are these icons?',
+    question: 'What should I bring to the event?',
     answer:
-      'The icons are in SVG (Scalable Vector Graphic) format. They can be imported into your design tool of choice and used directly in code.',
+      "You should bring your own equipment such as gloves, shovel, and don't forget to bring your tumbler. The trash bags will be provided by us.",
   },
   {
-    question: 'Can I use the icons at different sizes?',
+    question: 'What should I post on the Post Activity button?',
     answer:
-      "Yes. The icons are drawn on a 24 x 24 pixel grid, but the icons can be scaled to different sizes as needed. We don't recommend going smaller than 20 x 20 or larger than 64 x 64 to retain legibility and visual balance.",
+      'You are encouraged to take your best picture when you are cleaning up the beach. Participants with valid picture will gain 1 point on the Leaderboard.',
   },
   // More FAQs...
 ];
@@ -213,7 +213,7 @@ export default function EventDetailPage() {
                             {review.author}
                           </h3>
                           <p>Let&apos;s go🔥🔥 #SeasForUs</p>
-                          <div className='overflow-hidden bg-gray-100 rounded-lg aspect-w-5 aspect-h-3'>
+                          <div className='!mt-2 overflow-hidden bg-gray-100 rounded-lg aspect-w-5 aspect-h-3'>
                             <NextImage
                               src={product.imageSrc}
                               alt={product.name}
