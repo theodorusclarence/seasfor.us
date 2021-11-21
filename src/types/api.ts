@@ -39,3 +39,25 @@ export interface AuthApi {
   status: string;
   data: User;
 }
+
+export interface PostApi {
+  code: number;
+  status: string;
+  data: Post[];
+}
+
+interface Post {
+  id: number;
+  id_user: number;
+  caption?: string;
+  link_photo?: string;
+  user: UserApi;
+}
+
+interface UserApi {
+  id: number;
+  name: string;
+  email: string;
+  point: number;
+  link_avatar: string;
+}
