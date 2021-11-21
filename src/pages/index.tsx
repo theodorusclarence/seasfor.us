@@ -1,7 +1,8 @@
 import clsx from 'clsx';
 import * as React from 'react';
+import useSWR from 'swr';
 
-import { products } from '@/data/products';
+import { parseEventsData } from '@/lib/api';
 
 import Accent from '@/components/Accent';
 import EventCard from '@/components/events/EventCard';
@@ -10,6 +11,8 @@ import CustomLink from '@/components/links/CustomLink';
 import UnstyledLink from '@/components/links/UnstyledLink';
 import NextImage from '@/components/NextImage';
 import Seo from '@/components/Seo';
+
+import { EventsApi } from '@/types/api';
 
 const testimonials = [
   {
@@ -33,6 +36,9 @@ const testimonials = [
 ];
 
 export default function IndexPage() {
+  const { data: productsData } = useSWR<EventsApi>('/events');
+  const mappedProducts = parseEventsData(productsData);
+
   return (
     <Layout>
       <Seo />
@@ -112,16 +118,31 @@ export default function IndexPage() {
                     role='list'
                     className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
                   >
-                    {products.slice(0, 4).map((product, i) => (
-                      <EventCard
-                        key={product.id}
-                        className={clsx({
-                          'sm:hidden lg:block': i === 2,
-                          'sm:hidden xl:block': i === 3,
-                        })}
-                        product={product}
-                      />
-                    ))}
+                    {!productsData
+                      ? [...Array(4)].map((_, i) => (
+                          <div
+                            key={i}
+                            className={clsx(
+                              'bg-gray-400 animate-pulse h-[360px] rounded',
+                              {
+                                'sm:hidden lg:block': i === 2,
+                                'sm:hidden xl:block': i === 3,
+                              }
+                            )}
+                          />
+                        ))
+                      : mappedProducts.length > 0
+                      ? mappedProducts.slice(0, 4).map((product, i) => (
+                          <EventCard
+                            key={product.id}
+                            product={product}
+                            className={clsx({
+                              'sm:hidden lg:block': i === 2,
+                              'sm:hidden xl:block': i === 3,
+                            })}
+                          />
+                        ))
+                      : null}
                   </ul>
                 </div>
               </div>

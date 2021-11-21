@@ -6,9 +6,8 @@ import * as React from 'react';
 import { HiChevronDown, HiOutlineX, HiPlusSm } from 'react-icons/hi';
 import useSWR from 'swr';
 
+import { parseEventsData } from '@/lib/api';
 import useWithToast from '@/hooks/toast/useWithToast';
-
-import { Product } from '@/data/products';
 
 import Accent from '@/components/Accent';
 import EventCard from '@/components/events/EventCard';
@@ -36,21 +35,14 @@ const statusFilter = [
 
 export default function EventsPage() {
   const { data: productsData, isLoading } = useWithToast(
-    useSWR<EventsApi>('/events')
+    useSWR<EventsApi>('/events'),
+    {
+      loading: 'Getting events data',
+      success: 'Events fetched successfully',
+    }
   );
-  const mappedProducts: Array<Product> =
-    productsData?.data.map((d) => ({
-      id: d.id,
-      name: d.name,
-      description: d.description,
-      href: `/event/${d.id}`,
-      participants: d.participant + '',
-      date: new Date(d.date),
-      city: d.city.name,
-      imageSrc:
-        'https://res.cloudinary.com/theodorusclarence/image/upload/f_auto,c_fill,ar_5:3,w_1200/v1637384615/seasforus/max-PqoCWV93yps-unsplash_asxwzj.jpg',
-      imageAlt: `Picture of ${d.name}`,
-    })) ?? [];
+
+  const mappedProducts = parseEventsData(productsData);
 
   //#region  //*=========== Filter ===========
   const [mobileFiltersOpen, setMobileFiltersOpen] = React.useState(false);
