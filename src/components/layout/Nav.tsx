@@ -107,7 +107,12 @@ const DesktopNav = ({ setOpen }: NavProps) => {
   const user = useAuthStore.useUser();
 
   // eslint-disable-next-line no-console
-  const handleLogout = () => logout();
+  const handleLogout = () => {
+    logout();
+    window.location.replace(
+      'https://api.seasfor.us/api/auth0-endpoints/logout'
+    );
+  };
 
   return (
     <nav
