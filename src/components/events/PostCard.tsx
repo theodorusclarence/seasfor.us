@@ -30,7 +30,7 @@ export default function PostCard({ post, className }: PostCardProps) {
         <h3 className='text-sm text-gray-900'>{post.user.name}</h3>
         <p>{post.caption}</p>
         {post.link_photo && (
-          <div className='!mt-2 overflow-hidden bg-gray-100 rounded-lg aspect-w-5 aspect-h-3'>
+          <div className='!mt-2 overflow-hidden bg-gray-100 rounded-lg'>
             <img
               src={post.link_photo}
               alt={post.user.name}
