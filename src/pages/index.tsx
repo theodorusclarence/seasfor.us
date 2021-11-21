@@ -126,12 +126,12 @@ export default function IndexPage() {
                 </div>
               </div>
               <div className='px-4 mt-12 sm:hidden'>
-                <a
-                  href='#'
+                <UnstyledLink
+                  href='/events'
                   className='text-sm font-semibold text-primary-600 hover:text-primary-500'
                 >
                   See everything<span aria-hidden='true'> &rarr;</span>
-                </a>
+                </UnstyledLink>
               </div>
             </div>
           </section>
