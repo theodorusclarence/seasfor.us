@@ -62,7 +62,7 @@ export default function EventsPage() {
     }
   });
 
-  const cities = mappedProducts.map((p) => p.city);
+  const cities = [...Array.from(new Set(mappedProducts.map((p) => p.city)))];
   const filteredProducts = statusFilteredProducts.filter((p) => {
     if (selectedCity === 'all') return true;
 
