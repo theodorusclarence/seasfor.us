@@ -2,14 +2,13 @@
 import { Dialog, Menu, Transition } from '@headlessui/react';
 import clsx from 'clsx';
 import * as React from 'react';
-import {
-  HiChevronDown,
-  HiOutlineMenu,
-  HiOutlineUser,
-  HiOutlineX,
-} from 'react-icons/hi';
+import { HiChevronDown, HiOutlineMenu, HiOutlineX } from 'react-icons/hi';
 
 import UnstyledLink from '@/components/links/UnstyledLink';
+import NextImage from '@/components/NextImage';
+
+import { loginUrl } from '@/constant/api';
+import useAuthStore from '@/store/useAuthStore';
 
 const navItems = [
   { name: 'Events', href: '/events' },
@@ -79,7 +78,8 @@ const MobileNav = ({ open, setOpen }: NavProps) => {
             <div className='px-4 py-6 space-y-6 border-t border-gray-200'>
               <div className='flow-root'>
                 <UnstyledLink
-                  href='/signin'
+                  href={loginUrl}
+                  openNewTab={false}
                   className='block p-2 -m-2 font-medium text-gray-900'
                 >
                   Sign in
@@ -102,8 +102,12 @@ const MobileNav = ({ open, setOpen }: NavProps) => {
 };
 
 const DesktopNav = ({ setOpen }: NavProps) => {
+  const isAuthenticated = useAuthStore.useIsAuthenticated();
+  const logout = useAuthStore.useLogout();
+  const user = useAuthStore.useUser();
+
   // eslint-disable-next-line no-console
-  const handleLogout = () => console.log('logout');
+  const handleLogout = () => logout();
 
   return (
     <nav
@@ -153,77 +157,80 @@ const DesktopNav = ({ setOpen }: NavProps) => {
       </div>
 
       <div className='flex items-center'>
-        <div className='hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6'>
-          <UnstyledLink
-            href='/signin'
-            className='text-sm font-medium text-gray-700 hover:text-gray-800'
-          >
-            Sign in
-          </UnstyledLink>
-          <span className='w-px h-6 bg-gray-200' aria-hidden='true' />
-          <UnstyledLink
-            href='/signup'
-            className='text-sm font-medium text-gray-700 hover:text-gray-800'
-          >
-            Create an account
-          </UnstyledLink>
-        </div>
-
-        {/* Cart */}
-        <Menu as='div' className='relative ml-3 group'>
-          {({ open }) => (
-            <>
-              <div>
-                <Menu.Button className='flex items-center max-w-xs text-sm bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-400 lg:p-2 lg:rounded-md lg:hover:bg-gray-50'>
-                  <HiOutlineUser className='flex-shrink-0 w-6 h-6 text-gray-400 group-hover:text-gray-500' />
-                  <span className='hidden ml-3 text-sm font-medium text-gray-700 lg:block'>
-                    <span className='sr-only'>Open user menu for </span>
-                    User
-                  </span>
-                  <HiChevronDown
-                    className='flex-shrink-0 hidden w-5 h-5 ml-1 text-gray-400 lg:block'
-                    aria-hidden='true'
-                  />
-                </Menu.Button>
-              </div>
-              <Transition
-                show={open}
-                as={React.Fragment}
-                enter='transition ease-out duration-100'
-                enterFrom='transform opacity-0 scale-95'
-                enterTo='transform opacity-100 scale-100'
-                leave='transition ease-in duration-75'
-                leaveFrom='transform opacity-100 scale-100'
-                leaveTo='transform opacity-0 scale-95'
-              >
-                <Menu.Items
-                  static
-                  className='absolute right-0 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'
+        {isAuthenticated && user ? (
+          <Menu as='div' className='relative ml-3 group'>
+            {({ open }) => (
+              <>
+                <div>
+                  <Menu.Button className='flex items-center max-w-xs text-sm bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-400 lg:p-2 lg:rounded-md lg:hover:bg-gray-50'>
+                    <div className='w-8 h-8 overflow-hidden rounded-full'>
+                      <NextImage
+                        src={user.photo}
+                        alt={user.name}
+                        className='w-full h-full '
+                        width={256}
+                        height={256}
+                      />
+                    </div>
+                    <span className='hidden ml-3 text-sm font-medium text-gray-700 lg:block'>
+                      <span className='sr-only'>Open user menu for </span>
+                      {user.name}
+                    </span>
+                    <HiChevronDown
+                      className='flex-shrink-0 hidden w-5 h-5 ml-1 text-gray-400 lg:block'
+                      aria-hidden='true'
+                    />
+                  </Menu.Button>
+                </div>
+                <Transition
+                  show={open}
+                  as={React.Fragment}
+                  enter='transition ease-out duration-100'
+                  enterFrom='transform opacity-0 scale-95'
+                  enterTo='transform opacity-100 scale-100'
+                  leave='transition ease-in duration-75'
+                  leaveFrom='transform opacity-100 scale-100'
+                  leaveTo='transform opacity-0 scale-95'
                 >
-                  <Menu.Item>
-                    {({ active }) => (
-                      <UnstyledLink
-                        href='/myevents'
-                        className={clsx(
-                          active ? 'bg-gray-100' : '',
-                          'block px-4 py-2 text-sm text-gray-700'
-                        )}
-                      >
-                        My Events
-                      </UnstyledLink>
-                    )}
-                  </Menu.Item>
-                  <button
-                    onClick={handleLogout}
-                    className='block w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100'
+                  <Menu.Items
+                    static
+                    className='absolute right-0 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'
                   >
-                    Logout
-                  </button>
-                </Menu.Items>
-              </Transition>
-            </>
-          )}
-        </Menu>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <UnstyledLink
+                          href='/myevents'
+                          className={clsx(
+                            active ? 'bg-gray-100' : '',
+                            'block px-4 py-2 text-sm text-gray-700'
+                          )}
+                        >
+                          My Events
+                        </UnstyledLink>
+                      )}
+                    </Menu.Item>
+                    <button
+                      onClick={handleLogout}
+                      className='block w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100'
+                    >
+                      Logout
+                    </button>
+                  </Menu.Items>
+                </Transition>
+              </>
+            )}
+          </Menu>
+        ) : (
+          <div className='hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6'>
+            <UnstyledLink
+              href={loginUrl}
+              openNewTab={false}
+              className='text-sm font-medium text-gray-700 hover:text-gray-800'
+            >
+              Sign in
+            </UnstyledLink>
+          </div>
+        )}
       </div>
     </nav>
   );
