@@ -54,14 +54,14 @@ export default function EventCard({ product, className }: EventCardProps) {
         {status}
       </span>
       <div className='flex flex-col flex-1 p-4 space-y-2'>
-        <div className='flex items-center justify-between'>
+        <div className='flex items-center justify-between gap-2'>
           <h3 className='text-base font-medium text-gray-900'>
             <UnstyledLink href={`/event/${product.id}`}>
               <span aria-hidden='true' className='absolute inset-0' />
               {product.name}
             </UnstyledLink>
           </h3>
-          <p className='text-sm font-medium text-gray-700'>
+          <p className='flex-shrink-0 text-sm font-medium text-gray-700'>
             {product.participants} Participants
           </p>
         </div>
