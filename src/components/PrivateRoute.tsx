@@ -24,7 +24,7 @@ export default function PrivateRoute({
 
   React.useEffect(() => {
     if (!isLoading && !isAuthenticated && isProtected) {
-      router.push('/signin');
+      router.push('/events');
     }
   }, [isLoading, isAuthenticated, isProtected, router]);
 
