@@ -34,13 +34,10 @@ const statusFilter = [
 //#endregion  //*======== Data ===========
 
 export default function EventsPage() {
-  const { data: productsData, isLoading } = useWithToast(
-    useSWR<EventsApi>('/events'),
-    {
-      loading: 'Getting events data',
-      success: 'Events fetched successfully',
-    }
-  );
+  const { data: productsData } = useWithToast(useSWR<EventsApi>('/events'), {
+    loading: 'Getting events data',
+    success: 'Events fetched successfully',
+  });
 
   const mappedProducts = parseEventsData(productsData);
 
@@ -336,12 +333,12 @@ export default function EventsPage() {
             <h2 id='product-heading' className='sr-only'>
               Products
             </h2>
-            {isLoading ? (
+            {!productsData ? (
               <div className='grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:gap-x-8 xl:grid-cols-3'>
                 {[...Array(6)].map((_, i) => (
                   <div
                     key={i}
-                    className='bg-gray-400 animate-pulse h-[360px] rounded'
+                    className='bg-gray-400 animate-pulse h-[340px] rounded'
                   />
                 ))}
               </div>
