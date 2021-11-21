@@ -84,8 +84,6 @@ export default function IndexPage() {
                   src='https://res.cloudinary.com/theodorusclarence/image/upload/f_auto,w_1200/v1637384615/seasforus/seas-hero_ypzm3n.jpg'
                   alt='Image of sea'
                   title='Image from freepik'
-                  width={1200}
-                  height={736}
                   className='object-cover object-center w-full h-full'
                   objectFit='cover'
                   objectPosition='center'
@@ -165,8 +163,6 @@ export default function IndexPage() {
                 <NextImage
                   src='https://res.cloudinary.com/theodorusclarence/image/upload/f_auto,w_1200/v1637384615/seasforus/christoffer-engstrom-wc9avd2RaN0-unsplash_djb7pv.jpg'
                   alt='Water splashing in the ocean'
-                  width={1920}
-                  height={1280}
                   className='object-cover object-center w-full h-full'
                   objectFit='cover'
                   objectPosition='center'
