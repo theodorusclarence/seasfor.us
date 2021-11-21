@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { Tab } from '@headlessui/react';
 import clsx from 'clsx';
+import isFuture from 'date-fns/isFuture';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import toast from 'react-hot-toast';
@@ -95,6 +96,7 @@ export default function EventDetailPage() {
 
   const product = mappedProducts.find((event) => event.id === Number(id));
   const { date, time } = formatDateCardEvents(product?.date || new Date());
+  const ended = product ? !isFuture(product.date) : false;
   //#endregion  //*======== Get Event Data ===========
 
   //#region  //*=========== Submit Post Activity ===========
@@ -244,13 +246,21 @@ export default function EventDetailPage() {
                       Post Activity
                     </Button>
                   ) : (
-                    <Button
-                      variant='primary'
-                      onClick={handleJoin}
-                      isLoading={isLoading}
-                    >
-                      Join
-                    </Button>
+                    <>
+                      {!ended ? (
+                        <Button
+                          variant='primary'
+                          onClick={handleJoin}
+                          isLoading={isLoading}
+                        >
+                          Join
+                        </Button>
+                      ) : (
+                        <Button variant='light' disabled>
+                          Ended
+                        </Button>
+                      )}
+                    </>
                   )}
                 </>
               ) : (
