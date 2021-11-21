@@ -25,7 +25,9 @@ export default function MyEventsPage() {
     }
   );
 
-  const mappedMyProducts = parseMyEventsData(myProductsData);
+  const mappedMyProducts = parseMyEventsData(myProductsData).sort(
+    (a, b) => b.date.getTime() - a.date.getTime()
+  );
 
   const upcomingProducts = mappedMyProducts
     .filter((product) => isFuture(product.date))
@@ -80,7 +82,7 @@ export default function MyEventsPage() {
               aria-labelledby='upcoming-events'
               className='lg:col-start-3 lg:col-span-1'
             >
-              <div className='px-4 py-5 bg-white shadow sm:rounded-lg sm:px-6'>
+              <div className='px-4 py-5 mt-16 bg-white shadow sm:rounded-lg sm:px-6'>
                 <h2
                   id='upcoming-events'
                   className='text-lg font-bold text-gray-900'
