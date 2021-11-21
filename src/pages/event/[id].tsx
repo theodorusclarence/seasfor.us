@@ -12,8 +12,10 @@ import {
 import useSWR from 'swr';
 
 import { parseEventsData } from '@/lib/api';
+import axiosClient from '@/lib/axios';
 import { formatDateCardEvents } from '@/lib/date';
 import { simulateGet } from '@/lib/helper';
+import useLoadingToast from '@/hooks/toast/useLoadingToast';
 
 import Accent from '@/components/Accent';
 import Button from '@/components/buttons/Button';
@@ -109,6 +111,23 @@ export default function EventDetailPage() {
     return;
   };
 
+  //#region  //*=========== Join Event ===========
+  const isLoading = useLoadingToast();
+  const handleJoin = () => {
+    toast.promise(
+      axiosClient.post('/events/participate', {
+        id_event: id,
+        is_event_organizer: 0,
+      }),
+      {
+        ...defaultToastMessage,
+        loading: 'Adding you as a volunteer..',
+        success: "You've successfully joined the event!",
+      }
+    );
+  };
+  //#endregion  //*======== Join Event ===========
+
   return (
     <Layout>
       <Seo templateTitle='Event Detail' />
@@ -203,7 +222,13 @@ export default function EventDetailPage() {
             <div className='grid grid-cols-1 mt-10 gap-x-6 gap-y-4 sm:grid-cols-2'>
               {isAuthenticated ? (
                 <>
-                  <Button variant='primary'>Join</Button>
+                  <Button
+                    variant='primary'
+                    onClick={handleJoin}
+                    isLoading={isLoading}
+                  >
+                    Join
+                  </Button>
                   <Button onClick={() => setOpen(true)} variant='primary'>
                     Post Activity
                   </Button>

@@ -36,13 +36,13 @@ export default function Button({
             variant === 'dark',
           'bg-white disabled:bg-gray-200 text-dark hover:bg-gray-200 hover:text-dark focus-visible:text-dark border-gray-400 disabled:hover:text-dark':
             variant === 'light',
-          'bg-primary-400 text-white hover:bg-primary-400/90 hover:text-white border-primary-500 disabled:hover:bg-primary-400 disabled:brightness-75  focus-visible:text-dark':
+          'bg-primary-400 text-white hover:bg-primary-400/90 hover:text-white border-primary-500 disabled:hover:bg-primary-600 disabled:bg-primary-600 focus-visible:text-dark':
             variant === 'primary',
         },
         'disabled:cursor-not-allowed',
         !disabled && 'animated-underline',
         isLoading &&
-          'relative text-transparent hover:!text-transparent !cursor-wait transition-none',
+          'relative !text-transparent hover:!text-transparent !cursor-wait transition-none',
         className
       )}
       style={
@@ -58,7 +58,7 @@ export default function Button({
         <div
           className={clsx(
             'absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2',
-            variant !== 'dark' ? 'text-black' : 'text-white'
+            variant === 'light' ? 'text-black' : 'text-white'
           )}
         >
           <ImSpinner2 className='animate-spin' />
