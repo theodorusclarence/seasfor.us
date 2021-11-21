@@ -27,7 +27,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   React.useEffect(() => {
     const loadUser = async () => {
       try {
-        const token = query.token || localStorage.getItem('token');
+        if (query.token) {
+          localStorage.setItem('token', query.token as string);
+        }
+        const token = localStorage.getItem('token');
 
         if (token === null || token === undefined) {
           return;
@@ -37,9 +40,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           router.replace(pathname, undefined, { shallow: true });
         }
 
-        const res = await axiosClient.get<AuthApi>(
-          'https://api.seasfor.us/api/auth0-endpoints/info'
-        );
+        const res = await axiosClient.get<AuthApi>('/auth0-endpoints/info');
 
         login({
           id: res.data.data.id,
