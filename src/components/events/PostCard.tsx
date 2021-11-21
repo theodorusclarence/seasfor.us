@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import clsx from 'clsx';
 import * as React from 'react';
 
@@ -11,7 +12,7 @@ type PostCardProps = {
 };
 
 export default function PostCard({ post, className }: PostCardProps) {
-  return (
+  return post.caption ? (
     <div
       key={post.id}
       className={clsx(className, 'flex p-4 space-x-4 text-sm text-gray-500')}
@@ -30,7 +31,7 @@ export default function PostCard({ post, className }: PostCardProps) {
         <p>{post.caption}</p>
         {post.link_photo && (
           <div className='!mt-2 overflow-hidden bg-gray-100 rounded-lg aspect-w-5 aspect-h-3'>
-            <NextImage
+            <img
               src={post.link_photo}
               alt={post.user.name}
               className='object-cover object-center w-full h-full sm:w-full sm:h-full'
@@ -41,5 +42,5 @@ export default function PostCard({ post, className }: PostCardProps) {
         )}
       </div>
     </div>
-  );
+  ) : null;
 }

@@ -10,7 +10,7 @@ import {
   HiOutlineLocationMarker,
   HiOutlineUser,
 } from 'react-icons/hi';
-import useSWR from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
 
 import { parseEventsData } from '@/lib/api';
 import axiosClient from '@/lib/axios';
@@ -53,6 +53,8 @@ export default function EventDetailPage() {
   const isAuthenticated = useAuthStore.useIsAuthenticated();
   const user = useAuthStore.useUser();
 
+  const { mutate } = useSWRConfig();
+
   const router = useRouter();
   const { id } = router.query;
 
@@ -73,16 +75,6 @@ export default function EventDetailPage() {
   const onSubmit = (data: any) => {
     const formData = new FormData();
 
-    // const newBody = {
-    //   id_event: id,
-    //   caption: data.caption,
-    //   photo: data.photo[0],
-    // };
-
-    // for (const key in newBody) {
-    //   formData.append(key, newBody[key]);
-    // }
-
     formData.append('photo', data.photo[0]);
     formData.append('caption', data.caption);
     formData.append('id_event', id + '');
@@ -94,6 +86,7 @@ export default function EventDetailPage() {
           headers: { 'Content-Type': 'multipart/form-data' },
         })
         .then(() => {
+          mutate(`events/post/${id}`);
           setOpen(false);
         }),
       {
@@ -133,6 +126,9 @@ export default function EventDetailPage() {
   const joined =
     (postData?.data.findIndex((d) => d.id_user === user?.id) !== -1 ?? false) ||
     initialJoin;
+
+  const myPost = postData?.data.find((d) => d.id_user === user?.id);
+  const posted = Boolean(myPost?.caption);
 
   const isPostExist = Boolean(postData?.data.find((post) => post.caption));
   //#endregion  //*======== Get Posts ===========
@@ -231,31 +227,33 @@ export default function EventDetailPage() {
             <div className='grid grid-cols-1 mt-10 gap-x-6 gap-y-4 sm:grid-cols-2'>
               {isAuthenticated ? (
                 <>
-                  {joined ? (
-                    <Button
-                      onClick={() => setOpen(true)}
-                      // Show loading indicator when still fetching join status
-                      isLoading={!postData}
-                      variant='primary'
-                    >
-                      Post Activity
+                  {ended ? (
+                    <Button variant='light' disabled>
+                      Ended
                     </Button>
+                  ) : joined ? (
+                    posted ? (
+                      <Button variant='light' disabled>
+                        Posted
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => setOpen(true)}
+                        // Show loading indicator when still fetching join status
+                        isLoading={!postData}
+                        variant='primary'
+                      >
+                        Post Activity
+                      </Button>
+                    )
                   ) : (
-                    <>
-                      {!ended ? (
-                        <Button
-                          variant='primary'
-                          onClick={handleJoin}
-                          isLoading={isLoading}
-                        >
-                          Join
-                        </Button>
-                      ) : (
-                        <Button variant='light' disabled>
-                          Ended
-                        </Button>
-                      )}
-                    </>
+                    <Button
+                      variant='primary'
+                      onClick={handleJoin}
+                      isLoading={isLoading}
+                    >
+                      Join
+                    </Button>
                   )}
                 </>
               ) : (
