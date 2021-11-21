@@ -20,6 +20,7 @@ import useLoadingToast from '@/hooks/toast/useLoadingToast';
 import Accent from '@/components/Accent';
 import Button from '@/components/buttons/Button';
 import EventCard from '@/components/events/EventCard';
+import PostCard from '@/components/events/PostCard';
 import Layout from '@/components/layout/Layout';
 import ButtonLink from '@/components/links/ButtonLink';
 import UnstyledLink from '@/components/links/UnstyledLink';
@@ -33,36 +34,6 @@ import useAuthStore from '@/store/useAuthStore';
 
 import { EventsApi, PostApi } from '@/types/api';
 
-const reviews = {
-  average: 4,
-  featured: [
-    {
-      id: 1,
-      rating: 5,
-      content: `
-        <p>This icon pack is just what I need for my latest project. There's an icon for just about anything I could ever need. Love the playful look!</p>
-      `,
-      date: 'July 16, 2021',
-      datetime: '2021-07-16',
-      author: 'Emily Selman',
-      avatarSrc:
-        'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80',
-    },
-    {
-      id: 2,
-      rating: 5,
-      content: `
-        <p>Blown away by how polished this icon pack is. Everything looks so consistent and each SVG is optimized out of the box so I can use it directly with confidence. It would take me several hours to create a single icon this good, so it's a steal at this price.</p>
-      `,
-      date: 'July 12, 2021',
-      datetime: '2021-07-12',
-      author: 'Hector Gibbons',
-      avatarSrc:
-        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80',
-    },
-    // More reviews...
-  ],
-};
 const faqs = [
   {
     question: 'What should I bring to the event?',
@@ -74,7 +45,6 @@ const faqs = [
     answer:
       'You are encouraged to take your best picture when you are cleaning up the beach. Participants with valid picture will gain 1 point on the Leaderboard.',
   },
-  // More FAQs...
 ];
 
 export default function EventDetailPage() {
@@ -116,6 +86,7 @@ export default function EventDetailPage() {
     formData.append('photo', data.photo[0]);
     formData.append('caption', data.caption);
     formData.append('id_event', id + '');
+    formData.append('_method', 'PUT');
 
     toast.promise(
       axiosClient
@@ -162,6 +133,8 @@ export default function EventDetailPage() {
   const joined =
     (postData?.data.findIndex((d) => d.id_user === user?.id) !== -1 ?? false) ||
     initialJoin;
+
+  const isPostExist = Boolean(postData?.data.find((post) => post.caption));
   //#endregion  //*======== Get Posts ===========
 
   return (
@@ -333,36 +306,17 @@ export default function EventDetailPage() {
                   <h3 className='sr-only'>Posts</h3>
 
                   <div>
-                    {reviews.featured.map((review, reviewIdx) => (
-                      <div
-                        key={review.id}
-                        className={clsx(
-                          reviewIdx === 0 && 'mt-4',
-                          'flex p-4 space-x-4 text-sm text-gray-500'
-                        )}
-                      >
-                        <img
-                          src={review.avatarSrc}
-                          alt=''
-                          className='w-10 h-10 bg-gray-100 rounded-full'
+                    {isPostExist ? (
+                      postData?.data.map((post, reviewIdx) => (
+                        <PostCard
+                          key={post.id}
+                          post={post}
+                          className={reviewIdx === 0 ? 'mt-4' : ''}
                         />
-                        <div className='flex-1 space-y-1'>
-                          <h3 className='text-sm text-gray-900'>
-                            {review.author}
-                          </h3>
-                          <p>Let&apos;s go🔥🔥 #SeasForUs</p>
-                          <div className='!mt-2 overflow-hidden bg-gray-100 rounded-lg aspect-w-5 aspect-h-3'>
-                            {/* <NextImage
-                                src={product?.imageSrc}
-                                alt={product?.imageAlt}
-                                className='object-cover object-center w-full h-full sm:w-full sm:h-full'
-                                width='1200'
-                                height='720'
-                              /> */}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                      ))
+                    ) : (
+                      <p className='mt-4'>There are no posts yet!</p>
+                    )}
                   </div>
                 </Tab.Panel>
 

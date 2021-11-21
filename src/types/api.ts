@@ -46,7 +46,7 @@ export interface PostApi {
   data: Post[];
 }
 
-interface Post {
+export interface Post {
   id: number;
   id_user: number;
   caption?: string;
