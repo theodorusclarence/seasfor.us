@@ -15,7 +15,6 @@ import useSWR from 'swr';
 import { parseEventsData } from '@/lib/api';
 import axiosClient from '@/lib/axios';
 import { formatDateCardEvents } from '@/lib/date';
-import { simulateGet } from '@/lib/helper';
 import useLoadingToast from '@/hooks/toast/useLoadingToast';
 
 import Accent from '@/components/Accent';
@@ -100,14 +99,32 @@ export default function EventDetailPage() {
   //#endregion  //*======== Get Event Data ===========
 
   //#region  //*=========== Submit Post Activity ===========
-  const onSubmit = (data: unknown) => {
-    // eslint-disable-next-line no-console
-    console.log(data);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onSubmit = (data: any) => {
+    const formData = new FormData();
+
+    // const newBody = {
+    //   id_event: id,
+    //   caption: data.caption,
+    //   photo: data.photo[0],
+    // };
+
+    // for (const key in newBody) {
+    //   formData.append(key, newBody[key]);
+    // }
+
+    formData.append('photo', data.photo[0]);
+    formData.append('caption', data.caption);
+    formData.append('id_event', id + '');
 
     toast.promise(
-      simulateGet(2000).then(() => {
-        setOpen(false);
-      }),
+      axiosClient
+        .put('/events/participate', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
+        .then(() => {
+          setOpen(false);
+        }),
       {
         ...defaultToastMessage,
         success: 'Successfully posted!',
