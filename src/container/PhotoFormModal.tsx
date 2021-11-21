@@ -103,7 +103,7 @@ export default function PhotoFormModal({
                             label='Activity Photo'
                             validation={{ required: 'Photo must be filled' }}
                             accept='image/png, image/jpg, image/jpeg'
-                            helperText='You can upload file with .png, .jpg, atau .jpeg extension.'
+                            helperText='You can upload file with .png, .jpg, atau .jpeg extension up to 1 MB'
                           />
 
                           <TextArea
