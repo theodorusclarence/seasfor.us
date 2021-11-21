@@ -90,7 +90,7 @@ export default function EventDetailPage() {
 
     toast.promise(
       axiosClient
-        .put('/events/participate', formData, {
+        .post('/events/participate', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         })
         .then(() => {
