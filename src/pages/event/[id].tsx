@@ -120,12 +120,17 @@ export default function EventDetailPage() {
 
   //#region  //*=========== Join Event ===========
   const isLoading = useLoadingToast();
+  const [initialJoin, setInitialJoin] = React.useState<boolean>(false);
   const handleJoin = () => {
     toast.promise(
-      axiosClient.post('/events/participate', {
-        id_event: id,
-        is_event_organizer: 0,
-      }),
+      axiosClient
+        .post('/events/participate', {
+          id_event: id,
+          is_event_organizer: 0,
+        })
+        .then(() => {
+          setInitialJoin(true);
+        }),
       {
         ...defaultToastMessage,
         loading: 'Adding you as a volunteer..',
@@ -138,8 +143,8 @@ export default function EventDetailPage() {
   //#region  //*=========== Get Posts ===========
   const { data: postData } = useSWR<PostApi>(`events/post/${id}`);
   const joined =
-    postData?.data.findIndex((d) => d.id_user === user?.id) !== -1 ?? false;
-
+    (postData?.data.findIndex((d) => d.id_user === user?.id) !== -1 ?? false) ||
+    initialJoin;
   //#endregion  //*======== Get Posts ===========
 
   return (
