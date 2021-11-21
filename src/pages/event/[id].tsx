@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { Tab } from '@headlessui/react';
 import clsx from 'clsx';
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import toast from 'react-hot-toast';
 import {
@@ -8,10 +9,11 @@ import {
   HiOutlineLocationMarker,
   HiOutlineUser,
 } from 'react-icons/hi';
+import useSWR from 'swr';
 
+import { parseEventsData } from '@/lib/api';
+import { formatDateCardEvents } from '@/lib/date';
 import { simulateGet } from '@/lib/helper';
-
-import { products } from '@/data/products';
 
 import Accent from '@/components/Accent';
 import Button from '@/components/buttons/Button';
@@ -27,7 +29,8 @@ import { loginUrl } from '@/constant/api';
 import { defaultToastMessage } from '@/constant/toast';
 import useAuthStore from '@/store/useAuthStore';
 
-const product = products[0];
+import { EventsApi } from '@/types/api';
+
 const reviews = {
   average: 4,
   featured: [
@@ -71,12 +74,23 @@ const faqs = [
   },
   // More FAQs...
 ];
-const relatedProducts = [...products];
 
 export default function EventDetailPage() {
   const [open, setOpen] = React.useState<boolean>(false);
 
   const isAuthenticated = useAuthStore.useIsAuthenticated();
+
+  const router = useRouter();
+  const { id } = router.query;
+
+  const { data: productsData } = useSWR<EventsApi>('/events');
+  const mappedProducts = parseEventsData(productsData);
+  const relatedProducts = mappedProducts
+    .filter((event) => event.id === Number(id))
+    .slice(1, 4);
+
+  const product = mappedProducts.find((event) => event.id === Number(id));
+  const { date, time } = formatDateCardEvents(product?.date || new Date());
 
   const onSubmit = (data: unknown) => {
     // eslint-disable-next-line no-console
@@ -106,22 +120,32 @@ export default function EventDetailPage() {
         <div className='lg:grid lg:grid-rows-1 lg:grid-cols-7 lg:gap-x-8 lg:gap-y-10 xl:gap-x-16'>
           {/* Product image */}
           <div className='lg:row-end-1 lg:col-span-4'>
-            <div className='overflow-hidden bg-gray-100 rounded-lg aspect-w-4 aspect-h-3'>
-              <img
-                src={product.imageSrc}
-                alt={product.name}
-                className='object-cover object-center'
-              />
+            <div className='overflow-hidden bg-gray-100 rounded-lg aspect-w-5 aspect-h-3'>
+              {product ? (
+                <NextImage
+                  src={product.imageSrc}
+                  alt={product.imageAlt}
+                  className='object-cover object-center w-full h-full sm:w-full sm:h-full'
+                  width='1200'
+                  height='720'
+                />
+              ) : (
+                <div className='bg-gray-400 rounded animate-pulse' />
+              )}
             </div>
           </div>
 
           {/* Product details */}
-          <div className='max-w-2xl mx-auto mt-14 sm:mt-16 lg:max-w-none lg:mt-0 lg:row-end-2 lg:row-span-2 lg:col-span-3'>
+          <div className='w-full max-w-2xl mx-auto mt-14 sm:mt-16 lg:max-w-none lg:mt-0 lg:row-end-2 lg:row-span-2 lg:col-span-3'>
             <div className='flex flex-col-reverse'>
               <div className='mt-4'>
-                <h1 className='text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl'>
-                  {product.name}
-                </h1>
+                {product ? (
+                  <h1 className='text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl'>
+                    {product?.name}
+                  </h1>
+                ) : (
+                  <div className='bg-gray-400 w-1/2 h-[36px] rounded animate-pulse' />
+                )}
 
                 <h2 id='information-heading' className='sr-only'>
                   Product information
@@ -129,32 +153,51 @@ export default function EventDetailPage() {
               </div>
             </div>
 
-            <p className='mt-6 text-gray-500'>{product.description}</p>
+            <div className='mt-6 space-y-2'>
+              {product ? (
+                <p className='text-gray-500'>{product.description}</p>
+              ) : (
+                <>
+                  <div className='bg-gray-400 w-full h-[16px] rounded animate-pulse' />
+                  <div className='bg-gray-400 w-1/2 h-[16px] rounded animate-pulse' />
+                </>
+              )}
+            </div>
 
             <div className='mt-6 space-y-3'>
-              <div className='flex items-center'>
-                <div className='p-2 rounded-full bg-primary-100'>
-                  <HiOutlineUser className='text-gray-900' />
-                </div>
-                <p className='ml-3 text-sm text-gray-500'>
-                  Greenpeace Indonesia
-                </p>
-              </div>
-              <div className='flex items-center'>
-                <div className='p-2 rounded-full bg-primary-100'>
-                  <HiOutlineCalendar className='text-gray-900' />
-                </div>
-                <p className='ml-3 text-sm text-gray-500'>
-                  November 22, 2021, 09:00 AM
-                </p>
-              </div>
+              {product ? (
+                <>
+                  <div className='flex items-center'>
+                    <div className='p-2 rounded-full bg-primary-100'>
+                      <HiOutlineUser className='text-gray-900' />
+                    </div>
+                    <p className='ml-3 text-sm text-gray-500'>
+                      {product.participants} participants
+                    </p>
+                  </div>
+                  <div className='flex items-center'>
+                    <div className='p-2 rounded-full bg-primary-100'>
+                      <HiOutlineCalendar className='text-gray-900' />
+                    </div>
+                    <p className='ml-3 text-sm text-gray-500'>
+                      {date}, {time}
+                    </p>
+                  </div>
 
-              <div className='flex items-center'>
-                <div className='p-2 rounded-full bg-primary-100'>
-                  <HiOutlineLocationMarker className='text-gray-900' />
-                </div>
-                <p className='ml-3 text-sm text-gray-500'>Bali</p>
-              </div>
+                  <div className='flex items-center'>
+                    <div className='p-2 rounded-full bg-primary-100'>
+                      <HiOutlineLocationMarker className='text-gray-900' />
+                    </div>
+                    <p className='ml-3 text-sm text-gray-500'>{product.city}</p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className='bg-gray-400 w-3/4 h-[16px] rounded animate-pulse' />
+                  <div className='bg-gray-400 w-3/4 h-[16px] rounded animate-pulse' />
+                  <div className='bg-gray-400 w-3/4 h-[16px] rounded animate-pulse' />
+                </>
+              )}
             </div>
 
             <div className='grid grid-cols-1 mt-10 gap-x-6 gap-y-4 sm:grid-cols-2'>
@@ -232,13 +275,13 @@ export default function EventDetailPage() {
                           </h3>
                           <p>Let&apos;s go🔥🔥 #SeasForUs</p>
                           <div className='!mt-2 overflow-hidden bg-gray-100 rounded-lg aspect-w-5 aspect-h-3'>
-                            <NextImage
-                              src={product.imageSrc}
-                              alt={product.name}
+                            {/* <NextImage
+                              src={product?.imageSrc}
+                              alt={product?.imageAlt}
                               className='object-cover object-center w-full h-full sm:w-full sm:h-full'
                               width='1200'
                               height='720'
-                            />
+                            /> */}
                           </div>
                         </div>
                       </div>
