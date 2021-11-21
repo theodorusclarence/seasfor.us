@@ -17,12 +17,15 @@ import Accent from '@/components/Accent';
 import Button from '@/components/buttons/Button';
 import EventCard from '@/components/events/EventCard';
 import Layout from '@/components/layout/Layout';
+import ButtonLink from '@/components/links/ButtonLink';
 import UnstyledLink from '@/components/links/UnstyledLink';
 import NextImage from '@/components/NextImage';
 import Seo from '@/components/Seo';
 import PhotoFormModal from '@/container/PhotoFormModal';
 
+import { loginUrl } from '@/constant/api';
 import { defaultToastMessage } from '@/constant/toast';
+import useAuthStore from '@/store/useAuthStore';
 
 const product = products[0];
 const reviews = {
@@ -72,6 +75,8 @@ const relatedProducts = [...products];
 
 export default function EventDetailPage() {
   const [open, setOpen] = React.useState<boolean>(false);
+
+  const isAuthenticated = useAuthStore.useIsAuthenticated();
 
   const onSubmit = (data: unknown) => {
     // eslint-disable-next-line no-console
@@ -153,10 +158,23 @@ export default function EventDetailPage() {
             </div>
 
             <div className='grid grid-cols-1 mt-10 gap-x-6 gap-y-4 sm:grid-cols-2'>
-              <Button variant='primary'>Join</Button>
-              <Button onClick={() => setOpen(true)} variant='primary'>
-                Post Activity
-              </Button>
+              {isAuthenticated ? (
+                <>
+                  <Button variant='primary'>Join</Button>
+                  <Button onClick={() => setOpen(true)} variant='primary'>
+                    Post Activity
+                  </Button>
+                </>
+              ) : (
+                <ButtonLink
+                  href={loginUrl}
+                  openNewTab={false}
+                  variant='primary'
+                  className='text-center'
+                >
+                  Sign in to join
+                </ButtonLink>
+              )}
             </div>
           </div>
 
