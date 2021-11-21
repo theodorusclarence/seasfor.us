@@ -31,7 +31,7 @@ import { loginUrl } from '@/constant/api';
 import { defaultToastMessage } from '@/constant/toast';
 import useAuthStore from '@/store/useAuthStore';
 
-import { EventsApi } from '@/types/api';
+import { EventsApi, PostApi } from '@/types/api';
 
 const reviews = {
   average: 4,
@@ -81,10 +81,12 @@ export default function EventDetailPage() {
   const [open, setOpen] = React.useState<boolean>(false);
 
   const isAuthenticated = useAuthStore.useIsAuthenticated();
+  const user = useAuthStore.useUser();
 
   const router = useRouter();
   const { id } = router.query;
 
+  //#region  //*=========== Get Event Data ===========
   const { data: productsData } = useSWR<EventsApi>('/events');
   const mappedProducts = parseEventsData(productsData);
   const relatedProducts = mappedProducts
@@ -93,7 +95,9 @@ export default function EventDetailPage() {
 
   const product = mappedProducts.find((event) => event.id === Number(id));
   const { date, time } = formatDateCardEvents(product?.date || new Date());
+  //#endregion  //*======== Get Event Data ===========
 
+  //#region  //*=========== Submit Post Activity ===========
   const onSubmit = (data: unknown) => {
     // eslint-disable-next-line no-console
     console.log(data);
@@ -110,6 +114,7 @@ export default function EventDetailPage() {
 
     return;
   };
+  //#endregion  //*======== Submit Post Activity ===========
 
   //#region  //*=========== Join Event ===========
   const isLoading = useLoadingToast();
@@ -127,6 +132,13 @@ export default function EventDetailPage() {
     );
   };
   //#endregion  //*======== Join Event ===========
+
+  //#region  //*=========== Get Posts ===========
+  const { data: postData } = useSWR<PostApi>(`events/post/${id}`);
+  const joined =
+    postData?.data.findIndex((d) => d.id_user === user?.id) !== -1 ?? false;
+
+  //#endregion  //*======== Get Posts ===========
 
   return (
     <Layout>
@@ -222,16 +234,24 @@ export default function EventDetailPage() {
             <div className='grid grid-cols-1 mt-10 gap-x-6 gap-y-4 sm:grid-cols-2'>
               {isAuthenticated ? (
                 <>
-                  <Button
-                    variant='primary'
-                    onClick={handleJoin}
-                    isLoading={isLoading}
-                  >
-                    Join
-                  </Button>
-                  <Button onClick={() => setOpen(true)} variant='primary'>
-                    Post Activity
-                  </Button>
+                  {joined ? (
+                    <Button
+                      onClick={() => setOpen(true)}
+                      // Show loading indicator when still fetching join status
+                      isLoading={!postData}
+                      variant='primary'
+                    >
+                      Post Activity
+                    </Button>
+                  ) : (
+                    <Button
+                      variant='primary'
+                      onClick={handleJoin}
+                      isLoading={isLoading}
+                    >
+                      Join
+                    </Button>
+                  )}
                 </>
               ) : (
                 <ButtonLink
@@ -301,12 +321,12 @@ export default function EventDetailPage() {
                           <p>Let&apos;s go🔥🔥 #SeasForUs</p>
                           <div className='!mt-2 overflow-hidden bg-gray-100 rounded-lg aspect-w-5 aspect-h-3'>
                             {/* <NextImage
-                              src={product?.imageSrc}
-                              alt={product?.imageAlt}
-                              className='object-cover object-center w-full h-full sm:w-full sm:h-full'
-                              width='1200'
-                              height='720'
-                            /> */}
+                                src={product?.imageSrc}
+                                alt={product?.imageAlt}
+                                className='object-cover object-center w-full h-full sm:w-full sm:h-full'
+                                width='1200'
+                                height='720'
+                              /> */}
                           </div>
                         </div>
                       </div>
