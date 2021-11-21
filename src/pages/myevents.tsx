@@ -1,55 +1,36 @@
 /* eslint-disable @next/next/no-img-element */
+import { isFuture } from 'date-fns';
 import * as React from 'react';
+import useSWR from 'swr';
 
-import { products } from '@/data/products';
+import { parseMyEventsData } from '@/lib/api';
+import { formatMinDateEvents } from '@/lib/date';
+import useWithToast from '@/hooks/toast/useWithToast';
 
 import Accent from '@/components/Accent';
 import EventCard from '@/components/events/EventCard';
 import Layout from '@/components/layout/Layout';
+import CustomLink from '@/components/links/CustomLink';
 import UnstyledLink from '@/components/links/UnstyledLink';
 import Seo from '@/components/Seo';
 
-//#region  //*=========== DATA ===========
-const timeline = [
-  {
-    id: 1,
-    target: 'Kuta Beach',
-    href: '/event/1',
-    date: 'Sep 20',
-    datetime: '2020-09-20',
-  },
-  {
-    id: 2,
-    target: 'Kuta Beach',
-    href: '/event/1',
-    date: 'Sep 20',
-    datetime: '2020-09-20',
-  },
-  {
-    id: 3,
-    target: 'Kuta Beach',
-    href: '/event/1',
-    date: 'Sep 20',
-    datetime: '2020-09-20',
-  },
-  {
-    id: 4,
-    target: 'Kuta Beach',
-    href: '/event/1',
-    date: 'Sep 20',
-    datetime: '2020-09-20',
-  },
-  {
-    id: 5,
-    target: 'Kuta Beach',
-    href: '/event/1',
-    date: 'Sep 20',
-    datetime: '2020-09-20',
-  },
-];
-//#endregion  //*======== DATA ===========
+import { MyEventsApi } from '@/types/api';
 
 export default function MyEventsPage() {
+  const { data: myProductsData, isLoading } = useWithToast(
+    useSWR<MyEventsApi>('/events/mine'),
+    {
+      loading: 'Getting events data',
+      success: 'Events fetched successfully',
+    }
+  );
+
+  const mappedMyProducts = parseMyEventsData(myProductsData);
+
+  const upcomingProducts = mappedMyProducts
+    .filter((product) => isFuture(product.date))
+    .sort((a, b) => a.date.getTime() - b.date.getTime());
+
   return (
     <Layout>
       <Seo templateTitle='My Events' />
@@ -71,11 +52,27 @@ export default function MyEventsPage() {
                     All <Accent>#SeasForUs</Accent> events you&apos;ve been to
                   </p>
                 </div>
-                <div className='grid grid-cols-1 mt-4 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:gap-x-8 '>
-                  {products.map((product) => (
-                    <EventCard key={product.id} product={product} />
-                  ))}
-                </div>
+                {isLoading ? (
+                  <div className='grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:gap-x-8 xl:grid-cols-3'>
+                    {[...Array(6)].map((_, i) => (
+                      <div
+                        key={i}
+                        className='bg-gray-400 animate-pulse h-[360px] rounded'
+                      />
+                    ))}
+                  </div>
+                ) : mappedMyProducts.length > 0 ? (
+                  <div className='grid grid-cols-1 mt-4 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:gap-x-8 '>
+                    {mappedMyProducts.map((product) => (
+                      <EventCard key={product.id} product={product} />
+                    ))}
+                  </div>
+                ) : (
+                  <h2 className='mt-4'>
+                    You haven&apos;t contributed to any events yet.{' '}
+                    <CustomLink href='/events'>I want to contribute</CustomLink>
+                  </h2>
+                )}
               </section>
             </div>
 
@@ -94,10 +91,10 @@ export default function MyEventsPage() {
                 {/* Activity Feed */}
                 <div className='flow-root mt-6'>
                   <ul role='list' className='-mb-8'>
-                    {timeline.map((item, itemIdx) => (
+                    {upcomingProducts.map((item, itemIdx) => (
                       <li key={item.id}>
                         <div className='relative pb-8'>
-                          {itemIdx !== timeline.length - 1 && (
+                          {itemIdx !== upcomingProducts.length - 1 && (
                             <span
                               className='absolute top-4 left-1 -ml-px h-full w-0.5 bg-gray-200'
                               aria-hidden='true'
@@ -114,14 +111,12 @@ export default function MyEventsPage() {
                                     href={item.href}
                                     className='font-medium text-gray-900'
                                   >
-                                    {item.target}
+                                    {item.name}
                                   </UnstyledLink>
                                 </p>
                               </div>
                               <div className='text-sm text-right text-gray-500 whitespace-nowrap'>
-                                <time dateTime={item.datetime}>
-                                  {item.date}
-                                </time>
+                                {formatMinDateEvents(item.date)}
                               </div>
                             </div>
                           </div>

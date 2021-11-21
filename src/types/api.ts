@@ -61,3 +61,16 @@ interface UserApi {
   point: number;
   link_avatar: string;
 }
+export interface MyEventsApi {
+  code: number;
+  status: string;
+  data: MyEvent[];
+}
+
+interface MyEvent {
+  city_name: string;
+  caption: string;
+  link_photo: string;
+  event: Event;
+  participant: number;
+}
