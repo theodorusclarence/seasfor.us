@@ -17,3 +17,17 @@ export interface Event {
 interface City {
   name: string;
 }
+
+export interface LeaderboardApi {
+  code: number;
+  status: string;
+  data: Leader[];
+}
+
+interface Leader {
+  id: number;
+  name: string;
+  email: string;
+  point: number;
+  link_avatar: string;
+}
