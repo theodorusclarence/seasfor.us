@@ -5,7 +5,7 @@
 
 ![seasforus-poster](https://user-images.githubusercontent.com/55318172/142764894-9d46ecac-f674-4e5d-bae8-fc9a82ecb953.jpg)
 
-Demo video: https://youtu.be/stY-fpvqkh8
+Demo video: https://youtu.be/YeefWeSYLUQ
 
 [Frontend Repository](https://github.com/theodorusclarence/seasfor.us)
 
