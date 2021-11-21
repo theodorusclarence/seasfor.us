@@ -1,11 +1,15 @@
 import { useRouter } from 'next/router';
 import * as React from 'react';
 
+import axiosClient from '@/lib/axios';
+
 import useAuthStore from '@/store/useAuthStore';
 
 import Footer from './Footer';
 import Nav from './Nav';
 import PrivateRoute from '../PrivateRoute';
+
+import { AuthApi } from '@/types/api';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   //#region  //*=========== COMMONS ===========
@@ -33,16 +37,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           router.replace(pathname, undefined, { shallow: true });
         }
 
-        // TODO: get user detail
-        // const res = await axiosClient.get('/user/get-user-info');
+        const res = await axiosClient.get<AuthApi>(
+          'https://api.seasfor.us/api/auth0-endpoints/info'
+        );
 
         login({
-          id: '1',
-          name: 'Rizqi',
-          photo:
-            'https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-          token:
-            'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwcGRic3Vtc2VsIiwiaWF0IjoxNjM3NDY1NjAwLCJuYmYiOjE2Mzc0NjU2MDAsImV4cCI6MTYzODA3MDQwMCwic3ViIjoyfQ.jDLfPEX4cjTkyz_dKAGM3NBoSYinV6rAfThncc8bHM4',
+          id: res.data.data.id,
+          name: res.data.data.name,
+          photo: res.data.data.photo,
+          token: token + '',
         });
       } catch (err) {
         // eslint-disable-next-line no-console

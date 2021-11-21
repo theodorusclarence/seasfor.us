@@ -1,3 +1,5 @@
+import { User } from '@/types/auth';
+
 export interface EventsApi {
   code: number;
   status: string;
@@ -30,4 +32,10 @@ interface Leader {
   email: string;
   point: number;
   link_avatar: string;
+}
+
+export interface AuthApi {
+  code: number;
+  status: string;
+  data: User;
 }
